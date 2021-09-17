@@ -41,7 +41,7 @@ void LCD_init(void)
 	LCD_sendCommand(CLEAR_COMMAND); /* Clearing The LCD*/
 
 }
-void LCD_sendCommand(uint8 command)
+void LCD_sendCommand(uint8_t command)
 {
 	DIO_write(LCD_CTRL_PORT,RS,LOW);
 	DIO_write(LCD_CTRL_PORT,RW,LOW);
@@ -80,7 +80,7 @@ void LCD_sendCommand(uint8 command)
 
 
 }
-void LCD_displayCharacter(uint8 data)
+void LCD_displayCharacter(uint8_t data)
 {
 		DIO_write(LCD_CTRL_PORT,RS,HIGH);
 		DIO_write(LCD_CTRL_PORT,RW,LOW);
@@ -118,9 +118,9 @@ void LCD_displayCharacter(uint8 data)
 
 }
 
-void LCD_displayString(const char *Str)
+void LCD_displayString(const uint8_t *Str)
 {
-	uint8 i=0;
+	uint8_t i=0;
 	while(Str[i] != '\0')
 	{
 		LCD_displayCharacter(Str[i]);
@@ -131,9 +131,9 @@ void LCD_clearScreen(void)
 {
 	LCD_sendCommand(CLEAR_COMMAND); /* Clearing The LCD*/
 }
-void LCD_goToRowColumn(uint8 row,uint8 col)
+void LCD_goToRowColumn(uint8_t row,uint8_t col)
 {
-	uint8 address;
+	uint8_t address;
 	switch(row)
 	{
 	case 0:
@@ -150,19 +150,19 @@ void LCD_goToRowColumn(uint8 row,uint8 col)
 	}
 	LCD_sendCommand(SET_CURSOR_LOCATION | address);
 }
-void LCD_displayStringRowColumn(uint8 row,uint8 col,const char *Str)
+void LCD_displayStringRowColumn(uint8_t row,uint8_t col,const uint8_t *Str)
 {
 	LCD_goToRowColumn(row,col);
 	LCD_displayString(Str);
 }
 
 /*Helper Functions For ITOA*/
-void swap(char *x, char *y) {
-    char t = *x; *x = *y; *y = t;
+void swap(uint8_t *x, uint8_t *y) {
+	uint8_t t = *x; *x = *y; *y = t;
 }
 
 // Function to reverse `buffer[i…j]`
-char* reverse(char *buffer, int i, int j)
+uint8_t* reverse(uint8_t *buffer, uint32_t i, uint32_t j)
 {
     while (i < j) {
         swap(&buffer[i++], &buffer[j--]);
@@ -172,7 +172,7 @@ char* reverse(char *buffer, int i, int j)
 }
 
 // Iterative function to implement `itoa()` function in C
-char* ITOA(int value, char* buffer, int base)
+uint8_t* ITOA(uint32_t value, uint8_t* buffer, uint32_t base)
 {
     // invalid input
     if (base < 2 || base > 32) {
@@ -180,9 +180,9 @@ char* ITOA(int value, char* buffer, int base)
     }
 
     // consider the absolute value of the number
-    int n = abs(value);
+    uint32_t n = abs(value);
 
-    int i = 0;
+    uint32_t i = 0;
     while (n)
     {
         int r = n % base;
@@ -214,9 +214,9 @@ char* ITOA(int value, char* buffer, int base)
     // reverse the string and return it
     return reverse(buffer, 0, i - 1);
 }
-void LCD_integerToString(int data)
+void LCD_integerToString(uint32_t data)
 {
-	char buffer[32];
+	uint8_t buffer[32];
 	ITOA(data,buffer,10);
 	LCD_displayString(buffer);
 }
